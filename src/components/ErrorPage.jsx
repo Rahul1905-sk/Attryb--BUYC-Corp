@@ -1,11 +1,12 @@
+import { Box, Stack } from '@chakra-ui/react'
 import React from 'react'
 
 const ErrorPage = () => {
   return (
-    <div className='errImg'>
+    <Box className='errImg'>
         
 
-    </div>
+    </Box>
   )
 }
 

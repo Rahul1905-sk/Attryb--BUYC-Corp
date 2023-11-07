@@ -7,22 +7,23 @@ import { useAuth } from "./AuthContext";
 import AdminPageCard from "./AdminPageCard";
 import Loader from "./Loader";
 
-let originalData = []; 
+let originalData = [];
 
-const HomePage = () => {
+const AdminSection = () => {
   const [data, setData] = useState([]);
-  const toast = useToast() 
-
+  const toast = useToast()
+  const { token } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
- 
-
-  const getData = async () => { 
+  // console.log(token);
+  const getData = async () => {
     setIsLoading(true)
-    let res = await axios.get(`${BElink}/buyers`);
-    const result = res.data.msg;
-    setData(result);
-    originalData = result.slice();
-    setIsLoading(false)
+    
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    let res = await axios.get(`${BElink}/dealer/`);
+  const result = res.data.msg;
+  setData(result);
+  originalData = result.slice();
+  setIsLoading(false)
   };
 
   useEffect(() => {
@@ -41,9 +42,7 @@ const HomePage = () => {
         newData = data;
       }
       console.log(newData);
-      
       setData(newData);
-      
     } else {
       setData(originalData);
     }
@@ -95,10 +94,9 @@ const HomePage = () => {
     setData(originalData);
   };
 
-
   return (
     <Stack spacing={0}>
-      {isLoading && <Loader />}
+         {isLoading && <Loader />}
       <Stack spacing={0}>
         <HStack
           paddingTop={"30px"}
@@ -136,11 +134,10 @@ const HomePage = () => {
         </Button>
       </Stack>
       <Stack>
-        <HomePageCard data={data} getData={getData} />
+        <AdminPageCard data={data} getData={getData} />
       </Stack>
     </Stack>
-    
   );
 };
 
-export default HomePage;
+export default AdminSection;

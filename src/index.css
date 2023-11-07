@@ -11,28 +11,23 @@ body {
   font-family: "Montserrat", sans-serif;
   
 }
-
-/* display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  margin: -20px 0 50px; */
-
+ 
 .bgDiv {
-  background-image: url("https://img.freepik.com/free-vector/car-led-lights-realistic-composition-with-view-night-road-silhouettes-automobile-traffic-lights-illustration_1284-28531.jpg?w=996&t=st=1699185063~exp=1699185663~hmac=29d42b31ae82361a88736b4b0645c6378ca7f4270e26749f09eb2bd6c3e5fe86");
+  /* background-image: url("https://img.freepik.com/free-vector/car-led-lights-realistic-composition-with-view-night-road-silhouettes-automobile-traffic-lights-illustration_1284-28531.jpg?w=996&t=st=1699185063~exp=1699185663~hmac=29d42b31ae82361a88736b4b0645c6378ca7f4270e26749f09eb2bd6c3e5fe86"); */
+  background-image: url("https://i.ibb.co/N9Wmh3c/bg-Img-transformed.png");
 background-repeat: no-repeat;
 background-size:cover  ;
   width: 100vw;
-  height: 100vh;
-  margin: auto; 
+  height: 89vh;
+  /* margin: auto;  */
+  overflow-x: hidden;
   position: relative;
 }
 
 .mainDiv {
   position: absolute;
   width: 100%;
-  top: 28%;
+  top: 20%;
   left: 29%;
 }
 
@@ -42,5 +37,7 @@ background-image: url("https://www.beno.com/assets/errors/old-brand/Error-404.jp
 background-repeat: no-repeat;
 background-size:cover  ;
 width: 80vw; 
-height:100vh
+height:100vh;
+margin-left: 200px;
+margin : 'auto'
 }

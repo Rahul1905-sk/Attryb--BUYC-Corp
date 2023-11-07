@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Box,
   Flex,
@@ -16,38 +14,64 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  Heading,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
-const Links = ["Home", "OEM", "AddCar", "Login"];
-const hrefs = ["/", "/oempage", "/addcarpage" , "/login"];
-
-const NavLink = (props) => {
-  const { children, ind } = props;
-console.log({props});
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700"),
-      }}
-      href={hrefs[children[1]]}
-    >
-      {children[0]}
-    </Box>
-  );
-};
+import LOGO from "../../public/Attryb/1.png";
+import { useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 export default function Simple() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { token, logout } = useAuth();
+  const hrefs = ["/", "/oempage", "/login"];
+  const Links = ["Home", "OEM", token ? "Logout" : "Login"];
+  if (token) {
+    Links.splice(1, 0, "Dashboard", "Add Car");
+    hrefs.splice(1, 0, "/adminsection", "/addcarpage");
+  }
+
+  const handleLogoutClick = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const NavLink = (props) => {
+    const { children, ind } = props;
+    console.log({ props });
+    return (
+      <Box
+        as="a"
+        px={2}
+        py={1}
+        rounded={"md"}
+        _hover={{
+          textDecoration: "none",
+          bg: useColorModeValue("gray.200", "gray.700"),
+        }}
+        href={hrefs[children[1]]}
+        onClick={
+          token && children[0] === "Logout" ? handleLogoutClick : undefined
+        }
+      >
+        {children[0]}
+      </Box>
+    );
+  };
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box
+        bg={useColorModeValue("gray.100", "gray.900")}
+        px={4}
+        boxShadow={" rgb(38, 57, 77) 0px 20px 30px -25px;"}
+        position="sticky"
+        top={0}
+        left={0}
+        right={0}
+        zIndex={100}
+      >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -67,23 +91,23 @@ export default function Simple() {
                 minW={0}
               >
                 <Avatar
-                  size={"md"}
+                  size={"lg"}
                   src={
-                    "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+                    "https://i.pinimg.com/736x/61/bf/66/61bf666836faa3d13debf58d20c51427.jpg"
                   }
                 />
               </MenuButton>
             </Menu>
+            <Heading mt={'-4px'} size={"lg"}>BUYC</Heading>
           </Flex>
           <HStack spacing={8} alignItems={"center"}>
-            
             <HStack
               as={"nav"}
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
-              {Links.map((link,i) => (
-                <NavLink key={link}>{[link,i]}</NavLink>
+              {Links.map((link, i) => (
+                <NavLink key={link}>{[link, i]}</NavLink>
               ))}
             </HStack>
           </HStack>
@@ -92,8 +116,8 @@ export default function Simple() {
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map((link,i) => (
-                <NavLink key={link}>{[link,i]}</NavLink>
+              {Links.map((link, i) => (
+                <NavLink key={link}>{[link, i]}</NavLink>
               ))}
             </Stack>
           </Box>

@@ -6,6 +6,7 @@ import OemPage from '../components/OemPage'
 import SingleCarPage from '../components/SingleCarPage'
 import RegisterForm from '../components/RegisterForm'
 import AddCarPage from '../components/AddCarPage'
+import AdminSection from '../components/AdminSection'
 
 const Allroutes = () => {
   return (
@@ -14,7 +15,8 @@ const Allroutes = () => {
         <Route path='/login' element={<RegisterForm />} />
         <Route path='/oempage' element={<OemPage />} />
         <Route path='/addcarpage' element={<AddCarPage />} />
-        <Route path='/singlecarpage' element={<SingleCarPage />} />
+        <Route path='/adminsection' element={<AdminSection />} />
+        <Route path='/singlecarpage/:id' element={<SingleCarPage />} />
         <Route path='*' element={<ErrorPage />} />
     </Routes>
   )

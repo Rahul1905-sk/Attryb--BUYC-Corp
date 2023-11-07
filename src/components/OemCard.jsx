@@ -1,6 +1,4 @@
- 
-
-import { PropsWithChildren, Fragment } from 'react';
+import { PropsWithChildren, Fragment } from "react";
 import {
   chakra,
   Box,
@@ -12,71 +10,55 @@ import {
   Image,
   Container,
   Icon,
-//   StackProps
-} from '@chakra-ui/react'; 
-import { AiOutlineHeart, AiOutlineExclamationCircle } from 'react-icons/ai';
-import { BsTelephoneX } from 'react-icons/bs';
-import { EditIcon,DeleteIcon  } from '@chakra-ui/icons'
+  //   StackProps
+} from "@chakra-ui/react";
+import { AiOutlineHeart, AiOutlineExclamationCircle } from "react-icons/ai";
+import { BsTelephoneX } from "react-icons/bs";
+import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 
-const productsList = [
-  {
-    id: 1,
-    title: 'Ford F-150 SUV 2021',
-    location: 'Paris',
-    detail: ['2021', 'Petrol', '4500 cc', 'Automatic'],
-    updated_at: '17 days ago',
-    price: '$ 400k',
-    isFeatured: true,
-    image:
-      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb'
-  },
-  {
-    id: 2,
-    title: 'Haval Jolion Top',
-    location: 'New York',
-    detail: ['2021', 'Petrol', '3500 cc', 'Automatic'],
-    updated_at: '1 days ago',
-    price: '$ 450k',
-    image:
-      'https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb'
-  },
-  {
-    id: 1,
-    title: 'Ford F-150 SUV 2021',
-    location: 'Paris',
-    detail: ['2021', 'Petrol', '4500 cc', 'Automatic'],
-    updated_at: '17 days ago',
-    price: '$ 400k',
-    isFeatured: true,
-    image:
-      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb'
-  },
-  {
-    id: 2,
-    title: 'Haval Jolion Top',
-    location: 'New York',
-    detail: ['2021', 'Petrol', '3500 cc', 'Automatic'],
-    updated_at: '1 days ago',
-    price: '$ 450k',
-    image:
-      'https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb'
-  }
-];
+ 
+const OemCard = ({ data }) => {
+  
+  console.log(data);
+  const unitArr = ['', 'km/h', 'km/L', "bhp"]
+  
+  const newArr = data.map(item => {
+    const { _id, brand, model, price_inr, image, year, max_speed, mileage_city, power_bhp, colors } = item;
+   
+    const detailsData = [year, max_speed, mileage_city, power_bhp];
+  
+    return {
+      _id,
+      brand,
+      model,
+      price_inr,
+      image,
+      detail: detailsData,
+      colors
+    };
+  });
+  
+console.log({newArr})
 
-const OemCard = () => {
+
   return (
     <Container maxW="100vw" p={{ base: 5, md: 12 }} margin="0 auto">
-      <Stack spacing={4} display={'grid'} gridTemplateColumns={'repeat(2, 1fr)'}>
-        {productsList.map((product, OemCard) => (
+     
+      <Stack
+        spacing={4}
+        display={"grid"}
+        gridTemplateColumns={"repeat(2, 1fr)"}
+      >
+        {newArr.map((product, OemCard) => (
           <Stack
             key={OemCard}
             spacing={{ base: 0, md: 4 }}
-            direction={{ base: 'column', md: 'row' }}
+            direction={{ base: "column", md: "row" }}
             border="1px solid"
             borderColor="gray.400"
             p={2}
             rounded="md"
-            w={{ base: 'auto', md: '2xl' }}
+            w={{ base: "auto", md: "2xl" }}
             overflow="hidden"
             pos="relative"
           >
@@ -92,26 +74,39 @@ const OemCard = () => {
                 top={0}
                 left={0}
               >
-                <Text>FEATURED</Text> &nbsp; <Icon as={AiOutlineExclamationCircle} h={4} w={4} />
+                <Text>FEATURED</Text> &nbsp;{" "}
+                <Icon as={AiOutlineExclamationCircle} h={4} w={4} />
               </Flex>
             )}
-            <Flex ml="0 !important" w={'550px'}>
+            <Flex ml="0 !important" w={"550px"}>
               <Image
                 rounded="md"
-                w={{ base: '100%', md: '18rem' }}
+                w={{ base: "100%", md: "18rem" }}
                 h="auto"
-                objectFit="cover"
+                objectFit= "contain"
                 src={product.image}
                 alt="product image"
+
               />
             </Flex>
-            <Stack direction="column" spacing={2} w="100%" mt={{ base: '5px !important', sm: 0 }}>
+            <Stack
+              direction="column"
+              spacing={2}
+              w="100%"
+              mt={{ base: "5px !important", sm: 0 }}
+            >
               <Flex justify="space-between">
-                <chakra.h3 fontSize={{ base: 'lg', md: 'xl' }} fontWeight="bold">
-                  {product.title}
+                <chakra.h3
+                  fontSize={{ base: "lg", md: "xl" }}
+                  fontWeight="bold"
+                >
+                  {product.brand} {product.model}
                 </chakra.h3>
-                <chakra.h3 fontSize={{ base: 'lg', md: 'xl' }} fontWeight="bold">
-                  {product.price}
+                <chakra.h3
+                  fontSize={{ base: "lg", md: "xl" }}
+                  fontWeight="bold"
+                >
+                  ₹{(product.price_inr).toLocaleString()}
                 </chakra.h3>
               </Flex>
               <Box>
@@ -121,10 +116,10 @@ const OemCard = () => {
               </Box>
               <Flex alignItems="center" color="gray.500">
                 {product.detail.map((data, OemCard) => (
-                  <Fragment key={OemCard}>
-                    <Text fontSize={{ base: 'sm', sm: 'md' }}>{data}</Text>
+                  <Fragment key={OemCard+'we'}>
+                    <Text fontSize={{ base: "sm", sm: "md" }}>{data} {unitArr[OemCard]}</Text>
                     {product.detail.length - 1 != OemCard && (
-                      <chakra.span mx={2} fontSize={{ base: 'sm', sm: 'md' }}>
+                      <chakra.span mx={2} fontSize={{ base: "sm", sm: "md" }}>
                         |
                       </chakra.span>
                     )}
@@ -132,12 +127,22 @@ const OemCard = () => {
                 ))}
               </Flex>
               <Stack
-                direction={{ base: 'column-reverse', sm: 'row' }}
+                direction={{ base: "column-reverse", sm: "row" }}
                 justify="space-between"
-                alignItems={{ base: 'flex-start', sm: 'center' }}
+                alignItems={{ base: "flex-start", sm: "center" }}
               >
                 <Text fontSize="sm" mt={{ base: 1, sm: 0 }}>
-                  Updated {product.updated_at}
+                  {/* Updated {product.colors} */}
+                  <Stack display={'flex'} flexDir={'row'}  p={'5px 10px'}    >
+
+                  {product.colors.map((data, OemCard) => (
+                    <Box key={OemCard} borderRadius={'50%'} w={'20px'} h={'20px'} bgColor={data} boxShadow={'0 0 3px #3d2b3a'} >
+
+                  </Box>
+                ))}
+
+                </Stack>
+                
                 </Text>
                 {/* <Stack direction="row" spacing={1} mb="0 !important">
                   <IconButton>
@@ -180,4 +185,6 @@ const IconButton = ({ children, ...props }) => {
 };
 
 export default OemCard;
+
+
  

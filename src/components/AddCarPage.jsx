@@ -6,6 +6,8 @@ import {
   HStack,
   Heading,
   Input,
+  Select,
+  Stack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -13,27 +15,35 @@ import React, { useState } from "react";
 // import { useDispatch } from "react-redux";
 // import { AddCarPageFun } from "../Redux/marketplaceReducer/action";
 import { Link } from "react-router-dom";
+import ImageUpload from "./ImageUpload";
+import axios from "axios";
+import { BElink } from "./exportContent";
+import { useAuth } from "./AuthContext";
 
 const initialState = {
   title: "",
-  manufacturer: "",
+  brand: "",
   model: "",
-  imageURL: "",
+  image: "",
   year: "",
   price: "",
   mileage: "",
-  color: "",
+  colors: "",
+  originalPaint: "",
+  scratches: "",
+  fuel: "",
+  kilometer: "",
+  transmission: "",
   accidents: "",
-  prevBuyers: "",
-  registrationPlace: "",
+  owners: "",
+  place: "",
 };
 
-const AddCarPage = () => {
-  const { onOpen, onClose, isOpen } = useDisclosure();
+const AddCarPage = () => { 
   const toast = useToast();
-  // const dispatch = useDispatch();
+ 
   const [dealForm, setDealForm] = useState(initialState);
-
+const {token} = useAuth()
   const handleFormChange = (e) => {
     if (e.target.type === "number") {
       setDealForm((prev) => {
@@ -48,27 +58,28 @@ const AddCarPage = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // dispatch(AddCarPageFun(dealForm)).then(() => {
-    //   let msg = localStorage.getItem("marketmsg");
-    //   if (msg == "New Data has been added") {
-    //     toast({
-    //       title: "New Data has been added.",
-    //       description: "",
-    //       status: "success",
-    //       duration: 2000,
-    //       isClosable: true,
-    //     });
-    //   } else {
-    //     toast({
-    //       title: "Something Went Wrong.",
-    //       description: "",
-    //       status: "error",
-    //       duration: 2000,
-    //       isClosable: true,
-    //     });
-    //   }
-    // });
+    console.log({dealForm});
+    addCar()
   };
+
+
+  const addCar = async() => {
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const res = await axios.post(`${BElink}/dealer/add`, dealForm)
+    console.log(res.data.msg);
+    toast({
+      title: res.data.msg,
+      status: "info", 
+      duration: 2000,
+      isClosable: true,
+      position:"top"
+    });
+    setDealForm(initialState)
+  }
+
+
   return (
     <Box style={{ width: "100%", paddingBottom: "10px", paddingTop: "0px" }}>
       <form
@@ -88,149 +99,260 @@ const AddCarPage = () => {
             // paddingTop: "10px",
             margin: "20px",
             marginLeft: "30%",
+
             gap: "100px",
           }}
         >
-          <Heading>Add New Deal</Heading>
+          <Heading>Add Car Details</Heading>
         </HStack>
 
         <HStack style={{ width: "100%" }}>
           <br />
-          <Box style={{ width: "49%", marginTop: "15px" }}>
-            <FormControl>
+          <Box style={{ width: "49%", marginTop: "-10px" }}>
+            <FormControl >
               <FormLabel>Title</FormLabel>
               <Input
                 name="title"
                 type="text"
+               required
                 value={dealForm.title}
                 onChange={handleFormChange}
                 placeholder="Enter Title"
               />
             </FormControl>
             <br />
-            <FormControl>
+            <FormControl >
               <FormLabel>Manufacturer</FormLabel>
               <Input
-                name="manufacturer"
+                name="brand"
                 type="text"
-                value={dealForm.manufacturer}
+               required
+                value={dealForm.brand}
                 onChange={handleFormChange}
                 placeholder="Enter Manufacturer Name"
               />
             </FormControl>
             <br />
-            <FormControl>
-              <FormLabel>Model No.</FormLabel>
+
+            <FormControl >
+              <FormLabel>Model Name</FormLabel>
               <Input
                 name="model"
                 type="text"
+               required
                 value={dealForm.model}
                 onChange={handleFormChange}
                 placeholder="Enter Model Number"
               />
             </FormControl>
             <br />
-            <FormControl>
+            <FormControl >
               <FormLabel>Year</FormLabel>
               <Input
                 name="year"
                 type="number"
+               required
                 value={dealForm.year}
                 onChange={handleFormChange}
                 placeholder="Enter Manufacture Year"
               />
             </FormControl>
+
             <br />
-            <FormControl>
-              <FormLabel>Image URL</FormLabel>
-              <Input
-                name="imageURL"
-                type="url"
-                value={dealForm.imageURL}
-                onChange={handleFormChange}
-                placeholder="Enter Vehicle Image URL"
-              />
-            </FormControl>
-            <br />
-            <FormControl>
+            <FormControl >
               <FormLabel>Price</FormLabel>
               <Input
                 name="price"
                 type="number"
+               required
                 value={dealForm.price}
                 onChange={handleFormChange}
                 placeholder="Enter Listing price"
               />
             </FormControl>
+            <br />
+            <FormControl >
+              <FormLabel>Original Paint</FormLabel>
+              <Select
+                placeholder="Select option"
+                name="originalPaint"
+                onChange={handleFormChange}
+               required
+                value={dealForm.originalPaint}
+              >
+                required<option
+                 value="yes">Yes</option>
+                required<option
+                 value="no">No</option>
+              </Select>
+            </FormControl>
+            <br />
+            <FormControl >
+              <FormLabel>Fuel Type</FormLabel>
+              <Select
+                placeholder="Select option"
+                name="fuel"
+                onChange={handleFormChange}
+               required
+                value={dealForm.fuel}
+              >
+                required<option
+                 value="Petrol">Petrol</option>
+                required<option
+                 value="Diesel">Diesel</option>
+              </Select>
+            </FormControl>
+            <br />
+            <FormControl >
+              <FormLabel>Transmission</FormLabel>
+              <Select
+                placeholder="Select option"
+                name="transmission"
+                onChange={handleFormChange}
+               required
+                value={dealForm.transmission}
+              >
+                required<option
+                 value="Automatic">Automatic</option>
+                required<option
+                 value="Manual">Manual</option>
+              </Select>
+            </FormControl>
           </Box>
-          <Box style={{ width: "49%", marginLeft: "20px" }}>
-            <FormControl>
+
+          <Box style={{ width: "49%", marginLeft: "20px" , marginTop:'10px'}}>
+            <FormControl >
+              <FormLabel>Image</FormLabel>
+              <Stack>
+                <ImageUpload   dealForm={dealForm} setDealForm={setDealForm} />
+              </Stack>
+            </FormControl>
+
+            <br />
+            <FormControl >
+              <FormLabel>Color</FormLabel>
+            
+              <Select 
+               placeholder="Select option"
+               name="colors"
+               onChange={handleFormChange}
+              required
+               value={dealForm.colors}
+              >
+           
+            required<option
+             value="Red">Red</option>
+            required<option
+             value="Black">Black</option>
+            required<option
+             value="Silver">Silver</option>
+            required<option
+             value="Blue">Blue</option>
+            required<option
+             value="White">White</option>
+            required<option
+             value="Yellow">Yellow</option>
+          </Select>
+            </FormControl>
+            <br />
+            <FormControl >
+              <FormLabel>Accidents</FormLabel>
+              <Input
+                name="accidents"
+                type="number"
+               required
+                value={dealForm.accidents}
+                onChange={handleFormChange}
+                placeholder="Enter no. of accidents"
+              />
+            </FormControl>
+            <br />
+            <FormControl >
               <FormLabel>Mileage</FormLabel>
               <Input
                 name="mileage"
                 type="number"
+               required
                 value={dealForm.mileage}
                 onChange={handleFormChange}
                 placeholder="Enter Vehicle mileage"
               />
             </FormControl>
             <br />
-            <FormControl>
-              <FormLabel>Color</FormLabel>
-              <Input
-                name="color"
-                type="text"
-                value={dealForm.color}
+            <FormControl >
+              <FormLabel>OwnerShip</FormLabel>
+             
+              <Select
+                placeholder="Select option"
+                name="owners"
                 onChange={handleFormChange}
-                placeholder="Enter Vehicle color"
-              />
+               required
+                value={dealForm.owners}
+              >
+                required<option
+                 value="1st">1st</option>
+                required<option
+                 value="2nd">2nd</option>
+                required<option
+                 value="3rd">3rd</option>
+                required<option
+                 value="4th">4th</option>
+                required<option
+                 value="4+">4+</option>
+              </Select>
             </FormControl>
             <br />
-            <FormControl>
-              <FormLabel>Accidents</FormLabel>
-              <Input
-                name="accidents"
-                type="number"
-                value={dealForm.accidents}
-                onChange={handleFormChange}
-                placeholder="Enter Accidents No."
-              />
-            </FormControl>
-            <br />
-            <FormControl>
-              <FormLabel>Previous Buyers</FormLabel>
-              <Input
-                name="prevBuyers"
-                type="number"
-                value={dealForm.prevBuyers}
-                onChange={handleFormChange}
-                placeholder="Enter Previous Buyers No."
-              />
-            </FormControl>
-            <br />
-            <FormControl>
+            <FormControl >
               <FormLabel>Registration Place</FormLabel>
               <Input
-                name="registrationPlace"
+                name="place"
                 type="text"
-                value={dealForm.registrationPlace}
+               required
+                value={dealForm.place}
                 onChange={handleFormChange}
                 placeholder="Enter Registration Place"
               />
             </FormControl>
+
             <br />
-            <Button mt={4} colorScheme="purple" type="submit">
-              ADD DEAL
-            </Button>
+            <FormControl >
+              <FormLabel>Kilometer</FormLabel>
+              <Input
+                name="kilometer"
+                type="number"
+               required
+                value={dealForm.kilometer}
+                onChange={handleFormChange}
+                placeholder="Enter Kms Driven"
+              />
+            </FormControl>
+
+            <br />
+            <FormControl >
+              <FormLabel>Scratches</FormLabel>
+              <Select
+                placeholder="Select option"
+                name="scratches"
+                onChange={handleFormChange}
+               required
+                value={dealForm.scratches}
+              >
+                required<option
+                 value="yes">Yes</option>
+                required<option
+                 value="no">No</option>
+              </Select>
+            </FormControl>
+
+            <br />
           </Box>
         </HStack>
+        <Stack spacing={0} w={"120px"} m={"auto"}>
+          <Button mt={4}  colorScheme="purple" type="submit">
+            Submit
+          </Button>
+        </Stack>
       </form>
-      <br />
-      {/* <Link to="/getdeal">
-        <Button colorScheme="teal" size="md">
-          Go Back
-        </Button>
-      </Link> */}
     </Box>
   );
 };
